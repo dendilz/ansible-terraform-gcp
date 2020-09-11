@@ -1,0 +1,6 @@
+all:
+  hosts:
+    135.181.45.67:
+      domain_name: dendilz.0.devops.rebrain.srwx.net
+    95.217.187.72:
+      domain_name: dendilz.1.devops.rebrain.srwx.net

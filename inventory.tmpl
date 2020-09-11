@@ -1,0 +1,6 @@
+all:
+  hosts:
+%{ for index, dns in domain_name ~}
+    ${server_ip[index]}:
+      domain_name: ${domain_name[index]}
+%{ endfor ~}
