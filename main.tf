@@ -4,8 +4,8 @@ variable "aws_access_key" {}
 
 variable "aws_secret_key" {}
 
-variable "operating_systems" {
-  default = ["ubuntu-18.04", "centos-7"]
+variable "devs" {
+  default = ["load-balancer", "static-site"]
 }
 
 provider "hcloud" {
@@ -28,9 +28,9 @@ resource "hcloud_ssh_key" "danil_pub_key" {
 }
 
 resource "hcloud_server" "rebrain" {
-  count       = length(var.operating_systems)
-  name        = "danil-node-${count.index}"
-  image       = element(var.operating_systems, count.index)
+  count       = length(var.devs)
+  name        = "${element(var.devs, count.index)}-${count.index}"
+  image       = "ubuntu-18.04"
   server_type = "cx11"
   ssh_keys    = [data.hcloud_ssh_key.rebrain_ssh_key.name,
                  hcloud_ssh_key.danil_pub_key.id]
@@ -44,13 +44,17 @@ data "aws_route53_zone" "primary" {
   name = "devops.rebrain.srwx.net"
 }
 
-
-
 resource "aws_route53_record" "s53_record" {
-  count   = length(var.operating_systems)
+  count   = length(var.devs)
   zone_id = data.aws_route53_zone.primary.zone_id
-  name    = "dendilz.${count.index}.${data.aws_route53_zone.primary.name}"
+  name    = "${element(hcloud_server.rebrain.*.name, count.index)}.${data.aws_route53_zone.primary.name}"
   type    = "A"
   ttl     = "300"
   records = [element(hcloud_server.rebrain.*.ipv4_address, count.index)]
+}
+
+resource "null_resource" "install_nginx" {
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ./inventory ./install_nginx.yml"
+  }
 }

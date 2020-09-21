@@ -3,6 +3,7 @@
 
 ### Ansible ###
 *.retry
+inventory
 
 ### Terraform ###
 # Local .terraform directories

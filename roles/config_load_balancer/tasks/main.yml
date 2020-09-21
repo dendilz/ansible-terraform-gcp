@@ -1,0 +1,26 @@
+---
+# tasks file for config_load_balancer
+- name: copy load balancer config file
+  template:
+    src: load-balancer.j2
+    dest: /etc/nginx/sites-available/load-balancer
+  become: yes
+
+- name: create symlink for load balancer config file
+  file:
+    src: /etc/nginx/sites-available/load-balancer
+    dest : /etc/nginx/sites-enabled/load-balancer
+    state: link
+  become: yes
+
+- name: remove default symlink in sites-enabled
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: yes
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: yes

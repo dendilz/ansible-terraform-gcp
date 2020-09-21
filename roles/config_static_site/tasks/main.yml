@@ -1,0 +1,41 @@
+---
+# tasks file for config_static_site
+- name: copy the site config file
+  copy:
+    src: static-site
+    dest: /etc/nginx/sites-available/static-site
+  become: yes
+
+- name: create symlink rebrain site
+  file:
+    src: /etc/nginx/sites-available/static-site
+    dest: /etc/nginx/sites-enabled/static-site
+    state: link
+  become: yes
+
+- name: create a directory for rebrain site
+  file:
+    path: /var/www/site
+    state: directory
+
+- name: copy the content of the rebrain site
+  template:
+    src: index.html.j2
+    dest: /var/www/site/index.html
+
+- name: remove default symlink in sites-enabled
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: add permissions
+  file:
+    path: /var/www
+    mode: '0755'
+    recurse: yes
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: yes

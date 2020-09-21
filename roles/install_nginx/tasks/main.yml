@@ -1,28 +1,40 @@
 ---
 # tasks file for install_nginx
 - name: install system updates for centos systems
-  yum: name=* state=latest update_cache=yes
-  when: ansible_distribution == "CentOS"
+  yum: 
+    name: '*' 
+    update_cache: yes
+  when: 
+    ansible_distribution == "CentOS"
   become: yes
 
 - name: install system updates for ubuntu systems
-  apt: upgrade=dist update_cache=yes
-  when: ansible_distribution == "Ubuntu"
+  apt:
+    upgrade: dist
+    update_cache: yes
+  when:
+    ansible_distribution == "Ubuntu"
   become: yes
 
 - name: ensure nginx is at the latest version for ubuntu systems
-  apt: name=nginx state=latest
-  when: ansible_distribution == "Ubuntu"
+  apt:
+    name: nginx
+  when:
+    ansible_distribution == "Ubuntu"
   become: yes
 
 - name: ensure epel-relese for the centos systems
-  yum: name=epel-release state=latest
-  when: ansible_distribution == "CentOS"
+  yum:
+    name: epel-release
+  when:
+    ansible_distribution == "CentOS"
   become: yes
 
 - name: ensure nginx is at the latest version for centos systems
-  yum: name=nginx state=latest
-  when: ansible_distribution == "CentOS"
+  yum:
+    name: nginx
+  when:
+    ansible_distribution == "CentOS"
   become: yes
 
 - name: start nginx
@@ -30,3 +42,4 @@
     name: nginx
     state: started
   become: yes
+  ignore_errors: yes

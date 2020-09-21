@@ -1,0 +1,6 @@
+---
+# vars file for config_static_site
+task_list:
+- { description: "First task" }
+- { description: "Second Task" }
+- { description: "Third Task" }
