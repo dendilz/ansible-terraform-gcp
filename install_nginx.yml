@@ -1,21 +1,22 @@
 ---
 - hosts: all
-  remote_user: root
+  remote_user: devopbyrebrain
   vars:
     ansible_ssh_private_key_file: '~/.ssh/id_rsa_terraform'
 
   roles:
     - install_nginx
+  become: yes
 
 - hosts: lb
-  remote_user: root
+  remote_user: devopbyrebrain
   vars:
     ansible_ssh_private_key_file: '~/.ssh/id_rsa_terraform'
   roles:
     - config_load_balancer
 
 - hosts: web
-  remote_user: root
+  remote_user: devopbyrebrain
   vars:
     ansible_ssh_private_key_file: '~/.ssh/id_rsa_terraform'
   roles:

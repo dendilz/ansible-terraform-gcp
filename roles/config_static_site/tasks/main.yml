@@ -17,22 +17,26 @@
   file:
     path: /var/www/site
     state: directory
+  become: yes
 
 - name: copy the content of the rebrain site
   template:
     src: index.html.j2
     dest: /var/www/site/index.html
+  become: yes
 
 - name: remove default symlink in sites-enabled
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
+  become: yes
 
 - name: add permissions
   file:
     path: /var/www
     mode: '0755'
     recurse: yes
+  become: yes
 
 - name: restart nginx
   service:
