@@ -122,8 +122,6 @@ resource "google_compute_firewall" "http-server" {
     protocol = "tcp"
     ports    = ["1337"]
   }
-
-  source_ranges = ["35.191.0.0/16", "130.211.0.0/22", "209.85.152.0/22", "209.85.204.0/22"]
 }
 
 resource "null_resource" "install_nginx" {
