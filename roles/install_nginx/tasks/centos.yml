@@ -1,0 +1,19 @@
+- name: install system updates for centos systems
+  yum:
+    name: '*'
+    update_cache: yes
+
+- name: ensure epel-relese for the centos systems
+  yum:
+    name: epel-release
+
+- name: ensure nginx is at the latest version for centos systems
+  yum:
+    name: nginx
+
+- name: copy the nginx config for CentOS
+  vars:
+    user: nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
