@@ -1,2 +1,8 @@
 ---
 # handlers file for install_nginx
+- name: reload nginx
+  service: name=nginx state=reloaded
+
+- name: start nginx
+  service: name=nginx state=started
+  ignore_errors: yes

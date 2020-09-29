@@ -1,2 +1,4 @@
 ---
 # handlers file for config_static_site
+- name: reload nginx
+  service: name=nginx state=reloaded

@@ -1,19 +1,4 @@
 ---
 # tasks file for install_nginx
-- name: install system updates
-  apt:
-    upgrade: dist
-    update_cache: yes
-  become: yes
-
-- name: install nginx
-  apt:
-    name: nginx
-  become: yes
-
-- name: start nginx
-  service:
-    name: nginx
-    state: started
-  become: yes
-  ignore_errors: yes
+- include: "{{ ansible_distribution | lower }}.yml"
+  notify: start nginx
