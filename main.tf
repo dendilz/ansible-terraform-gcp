@@ -50,27 +50,23 @@ resource "google_compute_url_map" "my_url_map" {
 
 resource "google_compute_backend_service" "my_service" {
   name          = "dendilz-at-bk-ru"
-  protocol      = "HTTP"
-  health_checks = [google_compute_http_health_check.default.id]
+  health_checks = [google_compute_health_check.default.id]
 
   backend {
     group = google_compute_instance_group.webserver.id
   }
 }
 
-resource "google_compute_http_health_check" "default" {
-  name         = "dendilz-at-bk-ru"
-  request_path = "/health"
+resource "google_compute_health_check" "default" {
+  name = "http-health-check"
 
-  timeout_sec        = 5
-  check_interval_sec = 5
-  port               = 1337
+  timeout_sec        = 1
+  check_interval_sec = 1
 
-  lifecycle {
-    create_before_destroy = true
+  http_health_check {
+    port = 80
   }
 }
-
 resource "google_compute_instance_group" "webserver" {
   name        = "dendilz-at-bk-ru"
   description = "Terraform test instance group"
@@ -97,7 +93,7 @@ resource "google_compute_instance" "default" {
       image = "ubuntu-1804-lts"
     }
   }
-
+  
   network_interface {
     network = "default"
 
@@ -117,10 +113,6 @@ resource "google_compute_firewall" "http-server" {
   allow {
     protocol = "tcp"
     ports    = ["80"]
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["1337"]
   }
 }
 
